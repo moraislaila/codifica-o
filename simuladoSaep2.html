@@ -1,0 +1,1092 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simulado SAEP – Desenvolvimento de Software (StreamFlix)</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: Inter, 'Segoe UI', Arial, Helvetica, sans-serif;
+        font-size: 11pt;
+        color: #000;
+        background: #fff;
+      }
+      .page {
+        width: 210mm;
+        min-height: 297mm;
+        margin: 0 auto;
+        padding: 15mm;
+      }
+
+      /* ── CABEÇALHO ── */
+      .header-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 14px;
+      }
+      .header-table td,
+      .header-table th {
+        border: 1px solid #000;
+        padding: 3px 6px;
+        vertical-align: middle;
+        font-size: 10pt;
+      }
+      .logo-cell {
+        width: 140px;
+        text-align: center;
+        vertical-align: middle !important;
+        padding: 8px;
+      }
+      .senai-brand {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+      }
+      .senai-brand img {
+        max-width: 120px;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+      }
+      .title-cell {
+        text-align: center;
+        font-weight: bold;
+        font-size: 13pt;
+        letter-spacing: 1px;
+        padding: 6px;
+      }
+      .desemp-cell {
+        width: 90px;
+        text-align: center;
+        font-weight: bold;
+        font-size: 10pt;
+        vertical-align: top;
+      }
+      .label-bold {
+        font-weight: bold;
+      }
+
+      /* ── CAIXAS ── */
+      .capacidades-header {
+        background: #2e5496;
+        color: #fff;
+        font-weight: bold;
+        font-size: 12pt;
+        padding: 10px;
+        margin-top: 18px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .capacidades-content {
+        border: 1px solid #2e5496;
+        border-top: none;
+        padding: 8px 10px 10px 10px;
+        margin-bottom: 4px;
+      }
+      .capacidades-content p {
+        margin-bottom: 3px;
+      }
+      .capacidades-content p:last-child {
+        margin-bottom: 0;
+      }
+      .section-divider {
+        margin: 28px 0;
+        border-top: 3px solid #2e5496;
+        border-bottom: 3px solid #2e5496;
+        padding: 12px 0 8px 0;
+      }
+      .section-title {
+        font-size: 13pt;
+        font-weight: bold;
+        color: #2e5496;
+        text-align: center;
+        margin-bottom: 4px;
+      }
+      .box {
+        margin-bottom: 20px;
+      }
+      .cc {
+        padding: 12px 14px !important;
+      }
+      .cc p {
+        line-height: 1.5;
+      }
+
+      /* ── TABELAS ── */
+      table.t {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 10pt;
+        background: #fff;
+      }
+      table.t th {
+        background: #2e5496;
+        color: #fff;
+        padding: 8px;
+        border: 1px solid #2e5496;
+        text-align: left;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      table.t td {
+        padding: 7px 8px;
+        border: 1px solid #d0d7de;
+        vertical-align: top;
+        line-height: 1.45;
+      }
+      table.t tr:nth-child(even) td {
+        background: #fcfdfe;
+      }
+      .c {
+        text-align: center !important;
+      }
+      .chk {
+        text-align: center !important;
+        font-size: 14pt;
+        color: #555;
+      }
+      .b {
+        font-weight: bold;
+        color: #2e5496;
+      }
+      .sub {
+        font-weight: bold;
+        color: #2e5496;
+        text-transform: uppercase;
+        margin: 14px 0 8px;
+      }
+      .aviso {
+        border-left: 4px solid #2e5496;
+        background: #f3f6fb;
+        padding: 8px 12px;
+        margin: 10px 0;
+        font-size: 10pt;
+        line-height: 1.5;
+      }
+      tr {
+        break-inside: avoid;
+      }
+      figure {
+        margin: 6px 0 14px;
+        break-inside: avoid;
+      }
+      figcaption {
+        font-size: 9.5pt;
+        font-weight: bold;
+        color: #2e5496;
+        margin: 0 0 4px;
+      }
+
+      /* ── MER ── */
+      .m-e {
+        fill: #fff;
+        stroke: #000;
+        stroke-width: 1.3;
+      }
+      .m-l {
+        stroke: #000;
+        stroke-width: 1.1;
+      }
+      .m-c {
+        fill: #fff;
+        stroke: #000;
+        stroke-width: 1.2;
+      }
+      .m-ck {
+        fill: #000;
+        stroke: #000;
+        stroke-width: 1.2;
+      }
+      .m-d {
+        fill: #fff;
+        stroke: #000;
+        stroke-width: 1.3;
+      }
+      .m-n {
+        font:
+          bold 10.5px Arial,
+          Helvetica,
+          sans-serif;
+        fill: #000;
+      }
+      .m-a {
+        font:
+          10px Arial,
+          Helvetica,
+          sans-serif;
+        fill: #000;
+      }
+      .m-v {
+        font:
+          11px Arial,
+          Helvetica,
+          sans-serif;
+        fill: #000;
+      }
+      .m-k {
+        font:
+          10px Arial,
+          Helvetica,
+          sans-serif;
+        fill: #000;
+      }
+      .m-g {
+        font:
+          9.5px Arial,
+          Helvetica,
+          sans-serif;
+        fill: #000;
+      }
+      .m-lg {
+        fill: #fff;
+        stroke: #d0d7de;
+        stroke-width: 1;
+      }
+
+      /* ── WIREFRAMES (baixa fidelidade, mesmo estilo da prova real) ── */
+      .r-frame { fill: #fff; stroke: #000; stroke-width: 1; }
+      .r-box { fill: #d9d9d9; stroke: none; }
+      .r-img { fill: #d9d9d9; stroke: none; }
+      .r-panel { fill: #d9d9d9; stroke: #000; stroke-width: 1; }
+      .r-x { stroke: #8a8a8a; stroke-width: 0.8; }
+      .r-t { font: 10px Inter, Arial, Helvetica, sans-serif; fill: #222; }
+      .r-tb { font: bold 10px Inter, Arial, Helvetica, sans-serif; fill: #222; }
+      .r-big { font: 12px Inter, Arial, Helvetica, sans-serif; fill: #222; }
+      .r-ov { fill: #000; fill-opacity: 0.55; }
+      .wf { margin: 8px 0 12px; }
+
+      /* ── ESPECIFICAÇÕES (lista em tópicos, como na prova real) ── */
+      .spec { font-size: 10.5pt; line-height: 1.55; }
+      .spec p.h { font-weight: bold; margin: 10px 0 2px; }
+      .spec p.h2 { font-weight: bold; margin: 6px 0 2px 14px; }
+      .spec ul { list-style: '– '; margin: 0 0 4px 34px; padding: 0; }
+      .spec ul ul { margin-left: 22px; }
+      .spec li { margin: 1px 0; }
+      .spec ol { margin: 0 0 8px 22px; }
+      .spec ol li { margin: 6px 0; }
+
+      @media print {
+        body { background: #fff; }
+        .page { margin: 0; padding: 12mm 14mm; width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <!-- Capa -->
+      <div class="box">
+        <img
+          src="logoSimulado.png"
+          alt="Imagem da instituição"
+          style="
+            width: 100%;
+            height: auto;
+            display: block;
+            border: 1px solid #2e5496;
+          "
+        />
+      </div>
+
+      <div class="section-divider">
+        <div class="section-title">
+          SIMULADO SAEP <br />
+          DESENVOLVIMENTO DE SOFTWARE STREAMFLIX
+        </div>
+      </div>
+
+      <!-- Orientações Gerais -->
+      <div class="box">
+        <div class="capacidades-header">ORIENTAÇÕES GERAIS</div>
+        <div class="capacidades-content cc">
+          <p style="margin-bottom: 10px">
+            Durante a realização desta avaliação, siga as
+            <strong>regras</strong> listadas abaixo:
+          </p>
+          <table class="t">
+            <thead>
+              <tr>
+                <th style="width: 40px">#</th>
+                <th>Regras</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="c"><strong>1</strong></td>
+                <td>Desligue e guarde o seu telefone celular.</td>
+              </tr>
+              <tr>
+                <td class="c"><strong>2</strong></td>
+                <td>
+                  Antes de iniciar a prova, leia atentamente as instruções
+                  contidas neste caderno e esclareça as dúvidas com o avaliador,
+                  caso necessário. Para isso, você terá os 30 minutos iniciais
+                  de ambientação para ler a prova na íntegra e reconhecer o
+                  posto de trabalho.
+                </td>
+              </tr>
+              <tr>
+                <td class="c"><strong>3</strong></td>
+                <td>
+                  Aguarde o avaliador sinalizar o fim da ambientação ou informe
+                  a ele que você quer iniciar a prova. A partir desse momento,
+                  contará o tempo de 03 horas para que você realize as
+                  atividades.
+                </td>
+              </tr>
+              <tr>
+                <td class="c"><strong>4</strong></td>
+                <td>
+                  Para a execução desta prova, estão disponíveis no seu posto de
+                  trabalho: máquinas, equipamentos, instrumentos, ferramentas,
+                  materiais de consumo e toda a documentação técnica necessária
+                  para a realização das atividades.
+                </td>
+              </tr>
+              <tr>
+                <td class="c"><strong>5</strong></td>
+                <td>
+                  Durante a prova lembre-se de cumprir todas as exigências
+                  referentes às normas de saúde, segurança do trabalho e de meio
+                  ambiente, incluindo o uso de Equipamentos de Proteção
+                  Individual de acordo com a atividade.
+                </td>
+              </tr>
+              <tr>
+                <td class="c"><strong>6</strong></td>
+                <td>
+                  Ao final da avaliação, este caderno e demais itens
+                  disponibilizados devem ser devolvidos ao Avaliador.
+                </td>
+              </tr>
+              <tr>
+                <td class="c"><strong>7</strong></td>
+                <td>
+                  Para registrar o final da sua prova, você deverá assinar o
+                  canhoto da prova junto com o seu avaliador.
+                </td>
+              </tr>
+              <tr>
+                <td class="c"><strong>8</strong></td>
+                <td>
+                  O avaliador está à disposição para dirimir qualquer dúvida,
+                  desde que não seja referente à resolução da prova.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="aviso"><strong>Atenção:</strong> Dê o seu melhor!!!</div>
+        </div>
+      </div>
+
+      <!-- Contextualização -->
+      <div class="box">
+        <div class="capacidades-header">CONTEXTUALIZAÇÃO</div>
+        <div class="capacidades-content cc">
+          <p style="margin-bottom: 10px">
+            Em um mundo onde assistir a filmes sob demanda se tornou parte da
+            rotina, milhares de pessoas procuram uma plataforma simples para
+            descobrir títulos e demonstrar o que gostaram. A
+            <strong>StreamFlix</strong>, empresa especializada em soluções de
+            entretenimento digital, está desenvolvendo uma plataforma web de
+            streaming voltada para assinantes e para a equipe responsável pela
+            curadoria do catálogo.
+          </p>
+          <p style="margin-bottom: 10px">
+            Atualmente, a plataforma está em sua fase inicial de desenvolvimento
+            e precisa implementar o módulo essencial de
+            <strong>cadastro de filmes e coleta de feedback</strong>. Esse
+            módulo permitirá que os administradores cadastrem e organizem os
+            filmes do catálogo e que os demais usuários interajam com eles por
+            meio de curtidas.
+          </p>
+          <p style="margin-bottom: 10px">
+            Inicialmente, um protótipo foi criado utilizando capas e informações
+            de alguns administradores colaboradores da StreamFlix. No entanto, a
+            empresa deseja expandir o alcance da plataforma para um público mais
+            amplo e agregar novas funcionalidades. Para que essa expansão ocorra
+            de maneira eficiente, é necessário garantir que o sistema suporte
+            atualizações contínuas
+            <strong>sem comprometer a integridade</strong> das informações já
+            armazenadas.
+          </p>
+          <p>
+            A equipe de desenvolvimento da StreamFlix também enfatiza a
+            necessidade de um banco de dados bem estruturado, capaz de armazenar
+            e gerenciar de forma eficiente os perfis dos usuários, os filmes e
+            as interações. Além disso, a plataforma será desenvolvida com foco
+            em uma experiência de usuário fluida, permitindo que todo o conteúdo
+            seja carregado dinamicamente,
+            <strong>sem a necessidade de recarregar a página</strong>. Os dados
+            coletados no protótipo, incluindo o arquivo
+            <code>usuarios.csv</code>, deverão ser importados para o novo
+            sistema, garantindo a continuidade das informações.
+          </p>
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="capacidades-header">DESAFIO</div>
+        <div class="capacidades-content cc">
+          <p>
+            Para ajudar a empresa, você,
+            <strong>desenvolvedor(a) de software</strong>, deverá desenvolver um
+            sistema web onde
+            <strong
+              >TODAS as informações apresentadas aos usuários devem ser
+              extraídas exclusivamente do banco de dados</strong
+            >. O sistema deve carregar todo o conteúdo dinamicamente, sem
+            necessidade de recarregar a página, garantindo uma experiência
+            fluida ao usuário.
+          </p>
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="capacidades-header">
+          RESULTADOS ESPERADOS — ESPECIFICAÇÕES DA BASE DE DADOS
+        </div>
+        <div class="capacidades-content cc spec">
+          <p style="margin-bottom: 8px">
+            Você deve criar a <strong>estrutura física</strong> do banco de
+            dados desenvolvido por você contendo as seguintes especificações de
+            entidade e relacionamento:
+          </p>
+          <ol>
+            <li>
+              <strong>Usuários:</strong> são os indivíduos cadastrados na
+              plataforma, podendo ser administradores ou usuários comuns. Todos
+              podem realizar login.
+            </li>
+            <li>
+              <strong>Filmes:</strong> cadastrados exclusivamente por
+              administradores, representam os filmes exibidos na plataforma.
+            </li>
+            <li>
+              <strong>Curtidas:</strong> usuários comuns e usuários
+              administradores podem curtir os filmes cadastrados por
+              administradores.
+            </li>
+          </ol>
+          <div class="sub">Modelo Entidade-Relacionamento (MER)</div>
+          <figure>
+            <figcaption>
+              MER — duas entidades (tb_usuario, tb_filme) e uma entidade
+              associativa (tb_curtida)
+            </figcaption>
+            <svg
+              viewBox="0 0 840 480"
+              width="100%"
+              role="img"
+              aria-label="Diagrama MER do banco da StreamFlix: tb_usuario e tb_filme, com a entidade associativa tb_curtida"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect class="m-e" x="20" y="250" width="130" height="90" />
+              <text class="m-n" x="85.0" y="299.0" text-anchor="middle">
+                tb_usuario
+              </text>
+              <line class="m-l" x1="32" y1="250" x2="32" y2="110" />
+              <line class="m-l" x1="32" y1="110" x2="40" y2="110" />
+              <circle class="m-ck" cx="44" cy="110" r="4" />
+              <text class="m-a" x="52" y="113.5">id_usuario</text>
+              <line class="m-l" x1="44" y1="250" x2="44" y2="125" />
+              <line class="m-l" x1="44" y1="125" x2="52" y2="125" />
+              <circle class="m-c" cx="56" cy="125" r="4" />
+              <text class="m-a" x="64" y="128.5">nome</text>
+              <line class="m-l" x1="56" y1="250" x2="56" y2="140" />
+              <line class="m-l" x1="56" y1="140" x2="64" y2="140" />
+              <circle class="m-c" cx="68" cy="140" r="4" />
+              <text class="m-a" x="76" y="143.5">nome_usuario</text>
+              <line class="m-l" x1="68" y1="250" x2="68" y2="155" />
+              <line class="m-l" x1="68" y1="155" x2="76" y2="155" />
+              <circle class="m-c" cx="80" cy="155" r="4" />
+              <text class="m-a" x="88" y="158.5">email</text>
+              <line class="m-l" x1="80" y1="250" x2="80" y2="170" />
+              <line class="m-l" x1="80" y1="170" x2="88" y2="170" />
+              <circle class="m-c" cx="92" cy="170" r="4" />
+              <text class="m-a" x="100" y="173.5">senha</text>
+              <line class="m-l" x1="92" y1="250" x2="92" y2="185" />
+              <line class="m-l" x1="92" y1="185" x2="100" y2="185" />
+              <circle class="m-c" cx="104" cy="185" r="4" />
+              <text class="m-a" x="112" y="188.5">imagem_usuario</text>
+              <line class="m-l" x1="104" y1="250" x2="104" y2="200" />
+              <line class="m-l" x1="104" y1="200" x2="112" y2="200" />
+              <circle class="m-c" cx="116" cy="200" r="4" />
+              <text class="m-a" x="124" y="203.5">tipo(usuario, administrador)</text>
+              <line class="m-l" x1="116" y1="250" x2="116" y2="215" />
+              <line class="m-l" x1="116" y1="215" x2="124" y2="215" />
+              <circle class="m-c" cx="128" cy="215" r="4" />
+              <text class="m-a" x="136" y="218.5">created_at</text>
+              <line class="m-l" x1="128" y1="250" x2="128" y2="230" />
+              <line class="m-l" x1="128" y1="230" x2="136" y2="230" />
+              <circle class="m-c" cx="140" cy="230" r="4" />
+              <text class="m-a" x="148" y="233.5">updated_at</text>
+              <rect class="m-e" x="660" y="250" width="130" height="90" />
+              <text class="m-n" x="725.0" y="299.0" text-anchor="middle">
+                tb_filme
+              </text>
+              <line class="m-l" x1="672" y1="250" x2="672" y2="140" />
+              <line class="m-l" x1="672" y1="140" x2="680" y2="140" />
+              <circle class="m-ck" cx="684" cy="140" r="4" />
+              <text class="m-a" x="692" y="143.5">id_filme</text>
+              <line class="m-l" x1="684" y1="250" x2="684" y2="155" />
+              <line class="m-l" x1="684" y1="155" x2="692" y2="155" />
+              <circle class="m-c" cx="696" cy="155" r="4" />
+              <text class="m-a" x="704" y="158.5">titulo_filme</text>
+              <line class="m-l" x1="696" y1="250" x2="696" y2="170" />
+              <line class="m-l" x1="696" y1="170" x2="704" y2="170" />
+              <circle class="m-c" cx="708" cy="170" r="4" />
+              <text class="m-a" x="716" y="173.5">genero</text>
+              <line class="m-l" x1="708" y1="250" x2="708" y2="185" />
+              <line class="m-l" x1="708" y1="185" x2="716" y2="185" />
+              <circle class="m-ck" cx="720" cy="185" r="4" />
+              <text class="m-a" x="728" y="188.5">id_usuario</text>
+              <line class="m-l" x1="720" y1="250" x2="720" y2="200" />
+              <line class="m-l" x1="720" y1="200" x2="728" y2="200" />
+              <circle class="m-c" cx="732" cy="200" r="4" />
+              <text class="m-a" x="740" y="203.5">url_capa</text>
+              <line class="m-l" x1="732" y1="250" x2="732" y2="215" />
+              <line class="m-l" x1="732" y1="215" x2="740" y2="215" />
+              <circle class="m-c" cx="744" cy="215" r="4" />
+              <text class="m-a" x="752" y="218.5">created_at</text>
+              <line class="m-l" x1="744" y1="250" x2="744" y2="230" />
+              <line class="m-l" x1="744" y1="230" x2="752" y2="230" />
+              <circle class="m-c" cx="756" cy="230" r="4" />
+              <text class="m-a" x="764" y="233.5">updated_at</text>
+              <line class="m-l" x1="150" y1="295" x2="380" y2="295" />
+              <line class="m-l" x1="520" y1="295" x2="660" y2="295" />
+              <polygon class="m-d" points="380,295 450,267 520,295 450,323" />
+              <text class="m-v" x="450" y="298.5" text-anchor="middle">
+                cadastrar
+              </text>
+              <rect class="m-e" x="330" y="130" width="240" height="80" />
+              <line class="m-l" x1="330" y1="149" x2="400" y2="149" />
+              <line class="m-l" x1="400" y1="130" x2="400" y2="149" />
+              <text class="m-n" x="335" y="144">tb_curtida</text>
+              <polygon
+                class="m-d"
+                points="380.0,174.0 450.0,146.0 520.0,174.0 450.0,202.0"
+              />
+              <text class="m-v" x="450.0" y="177.5" text-anchor="middle">
+                curtir
+              </text>
+              <line class="m-l" x1="342" y1="130" x2="342" y2="50" />
+              <line class="m-l" x1="342" y1="50" x2="350" y2="50" />
+              <circle class="m-ck" cx="354" cy="50" r="4" />
+              <text class="m-a" x="362" y="53.5">id_curtida</text>
+              <line class="m-l" x1="354" y1="130" x2="354" y2="65" />
+              <line class="m-l" x1="354" y1="65" x2="362" y2="65" />
+              <circle class="m-ck" cx="366" cy="65" r="4" />
+              <text class="m-a" x="374" y="68.5">id_usuario</text>
+              <line class="m-l" x1="366" y1="130" x2="366" y2="80" />
+              <line class="m-l" x1="366" y1="80" x2="374" y2="80" />
+              <circle class="m-ck" cx="378" cy="80" r="4" />
+              <text class="m-a" x="386" y="83.5">id_filme</text>
+              <line class="m-l" x1="378" y1="130" x2="378" y2="95" />
+              <line class="m-l" x1="378" y1="95" x2="386" y2="95" />
+              <circle class="m-c" cx="390" cy="95" r="4" />
+              <text class="m-a" x="398" y="98.5">created_at</text>
+              <line class="m-l" x1="390" y1="130" x2="390" y2="110" />
+              <line class="m-l" x1="390" y1="110" x2="398" y2="110" />
+              <circle class="m-c" cx="402" cy="110" r="4" />
+              <text class="m-a" x="410" y="113.5">updated_at</text>
+              <line class="m-l" x1="150" y1="265" x2="300" y2="265" />
+              <line class="m-l" x1="300" y1="265" x2="300" y2="174" />
+              <line class="m-l" x1="300" y1="174" x2="380" y2="174" />
+              <line class="m-l" x1="660" y1="265" x2="600" y2="265" />
+              <line class="m-l" x1="600" y1="265" x2="600" y2="174" />
+              <line class="m-l" x1="600" y1="174" x2="520" y2="174" />
+              <text class="m-k" x="155" y="261">(0,n)</text>
+              <text class="m-k" x="655" y="261" text-anchor="end">(0,n)</text>
+              <text class="m-k" x="155" y="291">(0,n)</text>
+              <text class="m-k" x="655" y="291" text-anchor="end">(1,1)</text>
+              <g transform="translate(0,-140)">
+<rect class="m-lg" x="20" y="500" width="230" height="108" />
+              <text class="m-n" x="30" y="518">Legenda</text>
+              <circle class="m-ck" cx="38" cy="533" r="4" />
+              <text class="m-g" x="48" y="536.5">
+                Atributo-chave (PK ou FK)
+              </text>
+              <circle class="m-c" cx="38" cy="549" r="4" />
+              <text class="m-g" x="48" y="552.5">Atributo comum</text>
+              <text class="m-g" x="30" y="569">
+                (mín,máx): participação da entidade
+              </text>
+              <text class="m-g" x="30" y="582">
+                na associação. Ex.: (1,1) = exatamente 1.
+              </text>
+              <text class="m-g" x="30" y="598">
+                Retângulo + losango = entidade associativa
+              </text>
+              </g>
+            </svg>
+            </svg>
+          </figure>
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="capacidades-header">ORIENTAÇÕES — FONTES, CORES E ANEXOS</div>
+        <div class="capacidades-content cc">
+          <p>
+            • <strong>Fonte:</strong> <code>Inter</code>.<br />
+            • <strong>Anexo:</strong> pasta disponível no desktop do computador
+            do ambiente de avaliação.
+          </p>
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="capacidades-header">ESPECIFICAÇÃO DA PÁGINA INDEX</div>
+        <div class="capacidades-content cc spec">
+          <figure>
+            <figcaption>Wireframe — página index</figcaption>
+            <svg class="wf" viewBox="0 0 540 345" width="100%" role="img" aria-label="Wireframe da página index: cabeçalho, campo de busca, galeria em três colunas e rodapé" xmlns="http://www.w3.org/2000/svg">
+              <rect class="r-frame" x="20" y="14" width="500" height="42" />
+              <rect class="r-box" x="34" y="22" width="96" height="26" />
+              <text class="r-tb" x="82" y="39" text-anchor="middle">1.1 Seção usuário</text>
+              <text class="r-tb" x="270" y="39" text-anchor="middle">1.2 Seção empresa</text>
+              <rect class="r-box" x="410" y="22" width="96" height="26" />
+              <text class="r-tb" x="458" y="39" text-anchor="middle">1.3 Seção de login</text>
+              <rect class="r-box" x="180" y="68" width="180" height="16" />
+              <text class="r-tb" x="270" y="80" text-anchor="middle">2.1. Campo de Busca</text>
+              <text class="r-tb" x="270" y="100" text-anchor="middle">2.2. Galeria de filmes</text>
+              <rect class="r-img" x="20" y="106" width="162" height="52" /><line class="r-x" x1="20" y1="106" x2="182" y2="158" /><line class="r-x" x1="20" y1="158" x2="182" y2="106" />
+              <rect class="r-img" x="189" y="106" width="162" height="52" /><line class="r-x" x1="189" y1="106" x2="351" y2="158" /><line class="r-x" x1="189" y1="158" x2="351" y2="106" />
+              <rect class="r-img" x="358" y="106" width="162" height="52" /><line class="r-x" x1="358" y1="106" x2="520" y2="158" /><line class="r-x" x1="358" y1="158" x2="520" y2="106" />
+              <rect class="r-img" x="20" y="163" width="162" height="52" /><line class="r-x" x1="20" y1="163" x2="182" y2="215" /><line class="r-x" x1="20" y1="215" x2="182" y2="163" />
+              <rect class="r-img" x="189" y="163" width="162" height="52" /><line class="r-x" x1="189" y1="163" x2="351" y2="215" /><line class="r-x" x1="189" y1="215" x2="351" y2="163" />
+              <rect class="r-img" x="358" y="163" width="162" height="52" /><line class="r-x" x1="358" y1="163" x2="520" y2="215" /><line class="r-x" x1="358" y1="215" x2="520" y2="163" />
+              <rect class="r-img" x="20" y="220" width="162" height="52" /><line class="r-x" x1="20" y1="220" x2="182" y2="272" /><line class="r-x" x1="20" y1="272" x2="182" y2="220" />
+              <rect class="r-img" x="189" y="220" width="162" height="52" /><line class="r-x" x1="189" y1="220" x2="351" y2="272" /><line class="r-x" x1="189" y1="272" x2="351" y2="220" />
+              <rect class="r-img" x="358" y="220" width="162" height="52" /><line class="r-x" x1="358" y1="220" x2="520" y2="272" /><line class="r-x" x1="358" y1="272" x2="520" y2="220" />
+              <rect class="r-box" x="20" y="286" width="500" height="44" />
+              <text class="r-tb" x="270" y="311" text-anchor="middle">3. Rodapé da aplicação</text>
+            </svg>
+          </figure>
+          <p class="h">1. Cabeçalho da aplicação:</p>
+          <p class="h2">1.1 Seção usuário:</p>
+          <ul>
+            <li>Foto de perfil arredondada.</li>
+            <li>Nome do usuário <strong>@StreamFlix</strong>.</li>
+            <li>
+              Botão “Ver Perfil”:
+              <ul>
+                <li>Fundo <code>#000</code>;</li>
+                <li>Texto <code>#FFF</code>;</li>
+                <li>Desabilitado.</li>
+              </ul>
+            </li>
+          </ul>
+          <p class="h2">1.2 Seção empresa:</p>
+          <ul>
+            <li>Nome “StreamFlix”;</li>
+            <li>Centralizado.</li>
+          </ul>
+          <p class="h2">1.3 Botão de login:</p>
+          <ul>
+            <li>Fundo <code>#000</code>;</li>
+            <li>Texto <code>#FFF</code>;</li>
+            <li>Popup/modal de autenticação.</li>
+          </ul>
+          <p class="h">2. Corpo da aplicação:</p>
+          <p class="h2">2.1 Campo de busca:</p>
+          <ul>
+            <li>
+              Placeholder “Digite o nome do administrador... ex:
+              <em>@curador1</em>”.
+            </li>
+            <li>Ícone de <code>lupa.svg</code> à direita.</li>
+          </ul>
+          <p class="h2">2.2 Galeria de filmes:</p>
+          <ul>
+            <li>Carregamento dinâmico das capas e informações associadas.</li>
+            <li>Três colunas por linha.</li>
+            <li>
+              Capas com:
+              <ul>
+                <li>Título do filme (exemplo: “Interestelar”);</li>
+                <li>Contador de curtidas: ícone <code>coracao.svg</code>;</li>
+                <li>
+                  Quantidade de curtidas consultada e atualizada em tempo real.
+                </li>
+              </ul>
+            </li>
+            <li>
+              Efeito hover na capa (tooltip) com:
+              <ul>
+                <li>
+                  Nome do administrador responsável pelo cadastro (exemplo:
+                  “Cadastrado por: @curador1”);
+                </li>
+                <li>Gênero do filme (exemplo: “Gênero: Ficção Científica”).</li>
+              </ul>
+            </li>
+          </ul>
+          <p class="h">3. Rodapé da aplicação:</p>
+          <ul>
+            <li>Fundo <code>#000</code>.</li>
+            <li>
+              Texto <code>#FFF</code> com:
+              <ul>
+                <li>Nome da empresa “StreamFlix” à esquerda;</li>
+                <li>Texto “Copyright 2026-2027” à direita;</li>
+                <li>
+                  Ícones de redes sociais (<code>instagram.svg</code>,
+                  <code>tiktok.svg</code>, <code>linkedIn.svg</code>,
+                  <code>youtube.svg</code>) ao centro.
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <p class="h">4. Carregamento de página: atualização automática</p>
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="capacidades-header">ESPECIFICAÇÃO DO USUÁRIO NÃO LOGADO</div>
+        <div class="capacidades-content cc spec">
+          <p class="h">1. Usuário não autenticado:</p>
+          <ul>
+            <li>
+              Popup/modal de login será exibido quando clicar em:
+              <ul>
+                <li>Botão “Ver Perfil”;</li>
+                <li>Botão de curtida;</li>
+                <li>Campo de pesquisa de administradores.</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="capacidades-header">ESPECIFICAÇÃO DO LOGIN</div>
+        <div class="capacidades-content cc spec">
+          <figure>
+            <figcaption>Wireframe — modal de login</figcaption>
+            <svg class="wf" viewBox="0 0 540 345" width="100%" role="img" aria-label="Wireframe do modal de login sobreposto à página index" xmlns="http://www.w3.org/2000/svg">
+              <rect class="r-frame" x="20" y="14" width="500" height="42" />
+              <rect class="r-box" x="34" y="22" width="96" height="26" />
+              <text class="r-tb" x="82" y="39" text-anchor="middle">1.1 Seção usuário</text>
+              <text class="r-tb" x="270" y="39" text-anchor="middle">1.2 Seção empresa</text>
+              <rect class="r-box" x="410" y="22" width="96" height="26" />
+              <text class="r-tb" x="458" y="39" text-anchor="middle">1.3 Seção de login</text>
+              <rect class="r-box" x="180" y="68" width="180" height="16" />
+              <text class="r-tb" x="270" y="80" text-anchor="middle">2.1. Campo de Busca</text>
+              <text class="r-tb" x="270" y="100" text-anchor="middle">2.2. Galeria de filmes</text>
+              <rect class="r-img" x="20" y="106" width="162" height="52" /><line class="r-x" x1="20" y1="106" x2="182" y2="158" /><line class="r-x" x1="20" y1="158" x2="182" y2="106" />
+              <rect class="r-img" x="189" y="106" width="162" height="52" /><line class="r-x" x1="189" y1="106" x2="351" y2="158" /><line class="r-x" x1="189" y1="158" x2="351" y2="106" />
+              <rect class="r-img" x="358" y="106" width="162" height="52" /><line class="r-x" x1="358" y1="106" x2="520" y2="158" /><line class="r-x" x1="358" y1="158" x2="520" y2="106" />
+              <rect class="r-img" x="20" y="163" width="162" height="52" /><line class="r-x" x1="20" y1="163" x2="182" y2="215" /><line class="r-x" x1="20" y1="215" x2="182" y2="163" />
+              <rect class="r-img" x="189" y="163" width="162" height="52" /><line class="r-x" x1="189" y1="163" x2="351" y2="215" /><line class="r-x" x1="189" y1="215" x2="351" y2="163" />
+              <rect class="r-img" x="358" y="163" width="162" height="52" /><line class="r-x" x1="358" y1="163" x2="520" y2="215" /><line class="r-x" x1="358" y1="215" x2="520" y2="163" />
+              <rect class="r-img" x="20" y="220" width="162" height="52" /><line class="r-x" x1="20" y1="220" x2="182" y2="272" /><line class="r-x" x1="20" y1="272" x2="182" y2="220" />
+              <rect class="r-img" x="189" y="220" width="162" height="52" /><line class="r-x" x1="189" y1="220" x2="351" y2="272" /><line class="r-x" x1="189" y1="272" x2="351" y2="220" />
+              <rect class="r-img" x="358" y="220" width="162" height="52" /><line class="r-x" x1="358" y1="220" x2="520" y2="272" /><line class="r-x" x1="358" y1="272" x2="520" y2="220" />
+              <rect class="r-box" x="20" y="286" width="500" height="44" />
+              <text class="r-tb" x="270" y="311" text-anchor="middle">3. Rodapé da aplicação</text>
+              <rect class="r-ov" x="0" y="0" width="540" height="345" />
+              <rect class="r-box" x="95" y="52" width="350" height="100" />
+              <text class="r-big" x="270" y="72" text-anchor="middle">Login</text>
+            </svg>
+          </figure>
+          <p class="h">1. Formulário de login:</p>
+          <ul>
+            <li>
+              Centralizado na tela e sobreposto ao restante da interface, com:
+              <ul>
+                <li>Título “Login” centralizado no topo;</li>
+                <li>Ícone de fechar (X) no canto superior direito.</li>
+              </ul>
+            </li>
+            <li>
+              Campos do formulário:
+              <ul>
+                <li>
+                  Campo de Nome de Usuário:
+                  <ul>
+                    <li>Placeholder: “Digite seu nome_usuario”;</li>
+                    <li>Validação: formato válido (exemplo: curador1);</li>
+                    <li>
+                      Feedback de erro: nome_usuario menor que 3 caracteres ou
+                      vazio.
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  Campo de Senha:
+                  <ul>
+                    <li>Placeholder: “Digite sua senha”;</li>
+                    <li>Campo tipo password;</li>
+                    <li>
+                      Validação: a senha é obrigatória e não pode estar vazia.
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li>
+              Botão “Cancelar”:
+              <ul>
+                <li>Sem cor de fundo;</li>
+                <li>Bordas na cor <code>#000</code>;</li>
+                <li>Popup/modal deve ser fechado.</li>
+              </ul>
+            </li>
+            <li>
+              Botão “Login”:
+              <ul>
+                <li>Cor de fundo <code>#000</code>;</li>
+                <li>Texto cor <code>#FFF</code>.</li>
+              </ul>
+            </li>
+            <li>
+              Validação das credenciais:
+              <ul>
+                <li>
+                  Credenciais inválidas:
+                  <ul>
+                    <li>
+                      Mensagem de erro: “Usuário não encontrado ou senha
+                      incorreta”.
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  Credenciais válidas:
+                  <ul>
+                    <li>Popup/modal fecha automaticamente;</li>
+                    <li>Interface atualizada exibindo o usuário autenticado.</li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="capacidades-header">ESPECIFICAÇÃO DO USUÁRIO LOGADO</div>
+        <div class="capacidades-content cc spec">
+          <figure>
+            <figcaption>Wireframe — usuário logado com menu lateral</figcaption>
+            <svg class="wf" viewBox="0 0 540 345" width="100%" role="img" aria-label="Wireframe do usuário logado: menu lateral sobreposto à galeria, que continua em três colunas" xmlns="http://www.w3.org/2000/svg">
+              <rect class="r-frame" x="20" y="14" width="500" height="42" />
+              <rect class="r-box" x="34" y="22" width="96" height="26" />
+              <text class="r-tb" x="82" y="39" text-anchor="middle">1.1 Seção usuário</text>
+              <text class="r-tb" x="270" y="39" text-anchor="middle">1.2 Seção empresa</text>
+              <rect class="r-box" x="410" y="22" width="96" height="26" />
+              <text class="r-tb" x="458" y="39" text-anchor="middle">1.3 Seção de login</text>
+              <rect class="r-box" x="180" y="68" width="180" height="16" />
+              <text class="r-tb" x="270" y="80" text-anchor="middle">2.1. Campo de Busca</text>
+              <text class="r-tb" x="270" y="100" text-anchor="middle">2.2. Galeria de filmes</text>
+              <rect class="r-img" x="20" y="106" width="162" height="52" /><line class="r-x" x1="20" y1="106" x2="182" y2="158" /><line class="r-x" x1="20" y1="158" x2="182" y2="106" />
+              <rect class="r-img" x="189" y="106" width="162" height="52" /><line class="r-x" x1="189" y1="106" x2="351" y2="158" /><line class="r-x" x1="189" y1="158" x2="351" y2="106" />
+              <rect class="r-img" x="358" y="106" width="162" height="52" /><line class="r-x" x1="358" y1="106" x2="520" y2="158" /><line class="r-x" x1="358" y1="158" x2="520" y2="106" />
+              <rect class="r-img" x="20" y="163" width="162" height="52" /><line class="r-x" x1="20" y1="163" x2="182" y2="215" /><line class="r-x" x1="20" y1="215" x2="182" y2="163" />
+              <rect class="r-img" x="189" y="163" width="162" height="52" /><line class="r-x" x1="189" y1="163" x2="351" y2="215" /><line class="r-x" x1="189" y1="215" x2="351" y2="163" />
+              <rect class="r-img" x="358" y="163" width="162" height="52" /><line class="r-x" x1="358" y1="163" x2="520" y2="215" /><line class="r-x" x1="358" y1="215" x2="520" y2="163" />
+              <rect class="r-img" x="20" y="220" width="162" height="52" /><line class="r-x" x1="20" y1="220" x2="182" y2="272" /><line class="r-x" x1="20" y1="272" x2="182" y2="220" />
+              <rect class="r-img" x="189" y="220" width="162" height="52" /><line class="r-x" x1="189" y1="220" x2="351" y2="272" /><line class="r-x" x1="189" y1="272" x2="351" y2="220" />
+              <rect class="r-img" x="358" y="220" width="162" height="52" /><line class="r-x" x1="358" y1="220" x2="520" y2="272" /><line class="r-x" x1="358" y1="272" x2="520" y2="220" />
+              <rect class="r-box" x="20" y="286" width="500" height="44" />
+              <text class="r-tb" x="270" y="311" text-anchor="middle">3. Rodapé da aplicação</text>
+              <rect class="r-panel" x="20" y="14" width="166" height="316" />
+              <text class="r-big" x="30" y="40" text-anchor="start">2.2.1. Ao clicar</text>
+              <text class="r-big" x="30" y="56" text-anchor="start">aparecerá um menu</text>
+              <text class="r-big" x="30" y="72" text-anchor="start">(LATERAL)</text>
+            </svg>
+          </figure>
+          <p class="h">1. Sessão do usuário atualizada com:</p>
+          <ul>
+            <li>Nome e fotografia do usuário logado.</li>
+          </ul>
+          <p class="h">2. Botão “Ver Perfil”:</p>
+          <ul>
+            <li>Usuário tipo “usuario”: botão desabilitado;</li>
+            <li>Usuário tipo “administrador”: botão habilitado;</li>
+            <li>
+              Ao clicar aparecerá um menu (LATERAL) com informações do
+              administrador, incluindo:
+              <ul>
+                <li>
+                  Número total de curtidas nos filmes do usuário seguido pela
+                  palavra “Likes”;
+                </li>
+                <li>
+                  Número total de filmes do usuário seguido pela palavra
+                  “Filmes”;
+                </li>
+                <li>Ícone de fechar (X) no canto superior direito;</li>
+                <li>
+                  Botão “Seus filmes”:
+                  <ul>
+                    <li>Destacado com bordas superior e inferior;</li>
+                    <li>Carregamento dos filmes do usuário logado.</li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <p class="h">3. Botão “Logout”: redirecionar para a página inicial.</p>
+          <p class="h">4. Campo de busca:</p>
+          <ul>
+            <li>Placeholder: “Digite o nome do administrador”;</li>
+            <li>Validação: formato válido (exemplo: curador1);</li>
+            <li>
+              Administrador não existente:
+              <ul>
+                <li>Mensagem de erro: “Administrador não encontrado”.</li>
+              </ul>
+            </li>
+            <li>
+              Administrador existente:
+              <ul>
+                <li>
+                  Interface atualizada exibindo os filmes cadastrados do
+                  administrador pesquisado.
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <p class="h">5. Interação do usuário com filme:</p>
+          <ul>
+            <li>Já curtido: ícone “coracao.svg” na cor <code>#F00</code>;</li>
+            <li>
+              Nova curtida:
+              <ul>
+                <li>Ícone “coracao.svg” na cor <code>#F00</code>;</li>
+                <li>Número de curtidas incrementado em 1;</li>
+                <li>Máximo de 1 curtida por filme.</li>
+              </ul>
+            </li>
+            <li>
+              Remoção de curtida:
+              <ul>
+                <li>Ícone “coracao.svg” na cor <code>#000</code>;</li>
+                <li>Número de curtidas decrementado em 1;</li>
+                <li>Somente de curtidas de interação do usuário.</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="capacidades-header">ESPECIFICAÇÃO DO REGISTRO DE FILME</div>
+        <div class="capacidades-content cc spec">
+          <figure>
+            <figcaption>Wireframe — registro de filmes</figcaption>
+            <svg class="wf" viewBox="0 0 540 345" width="100%" role="img" aria-label="Wireframe do registro de filmes: formulário de cadastro e exibição dos filmes cadastrados" xmlns="http://www.w3.org/2000/svg">
+              <rect class="r-frame" x="20" y="14" width="500" height="42" />
+              <rect class="r-box" x="34" y="22" width="96" height="26" />
+              <text class="r-tb" x="82" y="39" text-anchor="middle">1.1 Seção usuário</text>
+              <text class="r-tb" x="270" y="39" text-anchor="middle">1.2 Seção empresa</text>
+              <rect class="r-box" x="410" y="22" width="96" height="26" />
+              <text class="r-tb" x="458" y="39" text-anchor="middle">1.3 Seção de login</text>
+              <text class="r-t" x="270" y="76" text-anchor="middle">1. Formulário de Cadastro de Filmes</text>
+              <rect class="r-box" x="70" y="84" width="400" height="80" />
+              <text class="r-t" x="20" y="190" text-anchor="start">2. Exibição dos filmes cadastrados:</text>
+              <rect class="r-img" x="20" y="200" width="162" height="52" /><line class="r-x" x1="20" y1="200" x2="182" y2="252" /><line class="r-x" x1="20" y1="252" x2="182" y2="200" />
+              <rect class="r-img" x="189" y="200" width="162" height="52" /><line class="r-x" x1="189" y1="200" x2="351" y2="252" /><line class="r-x" x1="189" y1="252" x2="351" y2="200" />
+              <rect class="r-img" x="358" y="200" width="162" height="52" /><line class="r-x" x1="358" y1="200" x2="520" y2="252" /><line class="r-x" x1="358" y1="252" x2="520" y2="200" />
+              <rect class="r-box" x="20" y="286" width="500" height="44" />
+              <text class="r-tb" x="270" y="311" text-anchor="middle">3. Rodapé da aplicação</text>
+            </svg>
+          </figure>
+          <p class="h">1. Formulário de Cadastro de Filmes</p>
+          <ul>
+            <li>
+              Campo “Título do Filme”:
+              <ul>
+                <li>Rótulo com o texto “Título do Filme”;</li>
+                <li>
+                  Placeholder: entrada de texto livre. ex.: <em>Interestelar</em>;
+                </li>
+                <li>Validação: campo obrigatório.</li>
+              </ul>
+            </li>
+            <li>
+              Campo “Gênero”:
+              <ul>
+                <li>Rótulo com o texto “Gênero”;</li>
+                <li>
+                  Placeholder: entrada de texto livre. ex.:
+                  <em>Ficção Científica</em>;
+                </li>
+                <li>Validação: campo obrigatório.</li>
+              </ul>
+            </li>
+            <li>
+              Campo “Capa”:
+              <ul>
+                <li>Rótulo com o texto “Capa”;</li>
+                <li>Botão upload de imagem: texto “Escolher arquivo”;</li>
+                <li>
+                  Validação:
+                  <ul>
+                    <li>Obrigatório;</li>
+                    <li>Formatos de imagem: JPG, JPEG, PNG, GIF e WEBP;</li>
+                    <li>
+                      Se nenhum arquivo for selecionado: mensagem “Nenhum
+                      arquivo escolhido”;
+                    </li>
+                    <li>
+                      Se seleção de arquivo: nome do arquivo no lugar da
+                      mensagem.
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li>
+              Botão “Cadastrar”:
+              <ul>
+                <li>
+                  Validação:
+                  <ul>
+                    <li>Se todos os campos forem válidos: cadastrar filme;</li>
+                    <li>
+                      Se algum campo inválido: mensagens de erro específicas para
+                      cada campo.
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <p class="h">2. Exibição dos filmes cadastrados:</p>
+          <ul>
+            <li>Título do filme (exemplo: “Interestelar”);</li>
+            <li>Ícone de lixeira vermelha;</li>
+            <li>Ao clicar, excluir o filme.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="capacidades-header">REGRAS DA ENTREGA</div>
+        <div class="capacidades-content cc">
+          <div class="aviso">
+            <strong>Regras da entrega</strong><br />
+            • Entregar a pasta do projeto compactada:
+            <code>StreamFlix_NomeSobrenome.zip</code>, com o código-fonte
+            (front-end e back-end).<br />
+            • Incluir o script <code>streamflix_NomeSobrenome.sql</code> com a
+            criação do banco, das tabelas e das constraints e a carga inicial.
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

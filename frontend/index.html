@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StreamFlix</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="perfil">
+            <img id="fotoPerfil" class="avatar" src="../imagens/logo/logo.jpg" alt="Foto da logo">
+            <div class="usuario oculto" id="userSection">
+                <span id="nomeUsuario"></span>
+                <button id="btnVerPerfil" class="btn">Meus filmes</button>
+            </div>
+        </div>
+
+        <h1 class="logo">StreamFlix</h1>
+        <button id="btnLogin" class="btn">Entrar</button>
+    </header>
+
+    <main>
+        <div class="busca">
+            <input id="inputBusca" placeholder="Digite o nome do filme">
+            <img src="../icons/lupa.svg" alt="Buscar" class="lupa">
+        </div>
+        <h2 class="titulo">Usuários e filmes</h2>
+        <div id="sessao" class="sessao" aria-live="polite"></div>
+
+        <!-- Cadastro de filmes (administrador) -->
+        <section id="registro" class="registro oculto">
+            <button id="btnVoltar" class="btn btn-outline">Voltar</button>
+            <h2 class="titulo">Cadastro de filmes</h2>
+
+            <label for="tituloFilme">Título do Filme</label>
+            <input type="text" id="tituloFilme" placeholder="ex.: Interestelar">
+            <span id="erroTitulo" class="erro"></span>
+
+            <label for="generoFilme">Gênero</label>
+            <input type="text" id="generoFilme" placeholder="ex.: Ficção Científica">
+            <span id="erroGenero" class="erro"></span>
+
+            <label>Capa</label>
+            <div class="arquivo">
+                <label for="capaFilme" class="btn">Escolher arquivo</label>
+                <input type="file" id="capaFilme" accept=".jpg,.jpeg,.png,.gif,.webp" hidden>
+                <span id="nomeArquivo">Nenhum arquivo escolhido</span>
+            </div>
+            <span id="erroCapa" class="erro"></span>
+
+            <button id="btnCadastrar" class="btn">Cadastrar</button>
+
+            <div id="meusFilmes" class="meus-filmes"></div>
+        </section>
+    </main>
+
+    <!-- Menu lateral (administrador) -->
+    <aside id="menuLateral" class="menu-lateral oculto">
+        <button id="fecharMenu" class="btn-fechar">x</button>
+        <img id="menuFoto" class="avatar" src="../imagens/logo/logo.jpg" alt="Foto do administrador">
+        <h3 id="menuNome"></h3>
+        <p><span id="menuLikes">0</span> Likes</p>
+        <p><span id="menuFilmes">0</span> Filmes</p>
+        <button id="btnSeusFilmes" class="btn-borda">Seus filmes</button>
+    </aside>
+
+    <footer>
+        <span>StreamFlix</span>
+        <div class="redes">
+            <img src="../icons/instagram.svg" alt="Instagram">
+            <img src="../icons/tiktok.svg" alt="Tiktok">
+            <img src="../icons/linkedin.svg" alt="Linkedin">
+            <img src="../icons/youtube.svg" alt="Youtube">
+        </div>
+        <span>Copyright© 2026-2027</span>
+    </footer>
+
+    <!-- Modal de login -->
+    <dialog id="modalLogin" class="modal-bg oculto">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Login</h2>
+                <button id="fecharModal" class="btn-fechar">x</button>
+            </div>
+            <input type="text" id="loginUsuario" placeholder="Digite seu nome_usuario">
+            <span id="erroUsuario" class="erro"></span>
+            <input type="password" id="loginSenha" placeholder="Digite sua senha">
+            <span id="erroSenha" class="erro"></span>
+            <span id="erroLogin" class="erro"></span>
+            <div class="modal-botoes">
+                <button id="btnCancelar" class="btn btn-outline">Cancelar</button>
+                <button id="btnConfirmarLogin" class="btn">Login</button>
+            </div>
+        </div>
+    </dialog>
+
+    <script src="javascript.js"></script>
+</body>
+
+</html>
