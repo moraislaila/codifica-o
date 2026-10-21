@@ -1,16 +1,23 @@
 const $ = id => document.getElementById(id);
 
-let usuario = JSON.parse(localStorage.getItem('usuario')); // usuário logado (ou null)
+let usuario = JSON.parse(localStorage.getItem('usuario'));
 let filmes = [];
 
 const esc = txt => String(txt).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
 // ---------- filmes ----------
 async function carregarFilmes() {
-    const r = await fetch('/api/filmes?id_usuario=' + (usuario ? usuario.id_usuario : ''));
-    filmes = await r.json();
-    desenharFilmes();
-    desenharMeusFilmes();
+    try {
+        const r = await fetch('/api/filmes?id_usuario=' + (usuario ? usuario.id_usuario : ''));
+        if (!r.ok) throw new Error(`O servidor respondeu com erro ${r.status}`);
+
+        filmes = await r.json();
+        desenharFilmes();
+        desenharMeusFilmes();
+    } catch (erro) {
+        console.error('Não foi possível carregar os filmes:', erro);
+        $('sessao').textContent = 'Não foi possível carregar os filmes. Verifique se o servidor e o banco StreamFlix estão conectados.';
+    }
 }
 
 function desenharFilmes() {
@@ -104,23 +111,31 @@ $('btnConfirmarLogin').addEventListener('click', async () => {
     $('erroLogin').textContent = '';
     if (nome_usuario.length < 3 || senha === '') return;
 
-    const r = await fetch('/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nome_usuario, senha })
-    });
+    try {
+        const r = await fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ nome_usuario, senha })
+        });
 
-    if (!r.ok) {
-        $('erroLogin').textContent = 'Usuário não encontrado ou senha incorreta';
-        return;
+        if (r.status === 401) {
+            $('erroLogin').textContent = 'Usuário ou senha incorretos';
+            return;
+        }
+        if (!r.ok) {
+            throw new Error(`O servidor respondeu com erro ${r.status}`);
+        }
+
+        usuario = await r.json();
+        localStorage.setItem('usuario', JSON.stringify(usuario));
+        $('loginSenha').value = '';
+        fecharLogin();
+        atualizarTela();
+        carregarFilmes();
+    } catch (erro) {
+        console.error('Falha ao fazer login:', erro);
+        $('erroLogin').textContent = 'Não foi possível conectar ao servidor/banco. Verifique se o servidor está iniciado.';
     }
-
-    usuario = await r.json();
-    localStorage.setItem('usuario', JSON.stringify(usuario));
-    $('loginSenha').value = '';
-    fecharLogin();
-    atualizarTela();
-    carregarFilmes();
 });
 
 function atualizarTela() {
