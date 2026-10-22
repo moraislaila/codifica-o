@@ -1,28 +1,27 @@
 const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '.env') });
-
 const express = require('express');
 const { Pool } = require('pg');
 const multer = require('multer');
 const fs = require('fs');
 
 const app = express();
+const PORT = 3000;
+
+// Configuração do Banco de Dados direto no código
+const pool = new Pool({
+    host: 'localhost',
+    port: 5433,
+    user: 'postgres',
+    password: 'senai',
+    database: 'stream_flix',
+});
+
+// Diretórios
 const frontendPath = path.join(__dirname, 'frontend');
 const capasPath = path.join(__dirname, 'imagens', 'capas');
-const pool = new Pool(
-    process.env.DATABASE_URL
-        ? { connectionString: process.env.DATABASE_URL }
-        : {
-            host: process.env.PGHOST || 'localhost',
-            port: Number(process.env.PGPORT || 5432),
-            user: process.env.PGUSER || 'postgres',
-            password: process.env.PGPASSWORD || 'senai',
-            database: process.env.PGDATABASE || "StreamFlix",
-        },
-);
-
 fs.mkdirSync(capasPath, { recursive: true });
 
+// Upload de imagens
 const storage = multer.diskStorage({
     destination: capasPath,
     filename: (req, file, callback) => {
@@ -31,13 +30,16 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
+// Middlewares e arquivos estáticos
 app.use(express.json());
 app.use(express.static(frontendPath));
 app.use('/imagens', express.static(path.join(__dirname, 'imagens')));
 app.use('/icons', express.static(path.join(__dirname, 'icons')));
 app.use('/fonts', express.static(path.join(__dirname, 'fonts')));
+
 app.get('/', (req, res) => res.sendFile(path.join(frontendPath, 'index.html')));
 
+// Rota: Listar filmes
 app.get('/api/filmes', async (req, res) => {
     const idUsuario = req.query.id_usuario || null;
     const { rows } = await pool.query(
@@ -55,6 +57,7 @@ app.get('/api/filmes', async (req, res) => {
     res.json(rows);
 });
 
+// Rota: Login
 app.post('/api/login', async (req, res) => {
     const { nome_usuario, senha } = req.body;
     const { rows } = await pool.query(
@@ -63,11 +66,12 @@ app.post('/api/login', async (req, res) => {
         [nome_usuario, senha],
     );
     if (!rows.length) {
-        return res.status(401).json({ erro: 'Usuário ou senha incorretos' });
+        return res.status(401).json({ erro: 'Usuário não encontrado ou senha incorreta' });
     }
     res.json(rows[0]);
 });
 
+// Rota: Curtir/Descurtir
 app.post('/api/curtidas', async (req, res) => {
     const { id_usuario, id_filme } = req.body;
     if (!Number.isInteger(Number(id_usuario)) || !Number.isInteger(Number(id_filme))) {
@@ -86,6 +90,7 @@ app.post('/api/curtidas', async (req, res) => {
     res.json({ ok: true });
 });
 
+// Rota: Perfil do Administrador
 app.get('/api/perfil/:id', async (req, res) => {
     const { rows } = await pool.query(
         `SELECT COUNT(DISTINCT f.id_filme)::int AS filmes,
@@ -98,11 +103,12 @@ app.get('/api/perfil/:id', async (req, res) => {
     res.json(rows[0]);
 });
 
+// Rota: Cadastrar Filme
 app.post('/api/filmes', upload.single('capa'), async (req, res) => {
     const { titulo_filme, genero, id_usuario } = req.body;
     if (!req.file) return res.status(400).json({ erro: 'A capa é obrigatória' });
     if (!titulo_filme || !genero || !id_usuario) {
-        fs.unlinkSync(req.file.path);
+        if (fs.existsSync(req.file.path)) fs.unlinkSync(req.file.path);
         return res.status(400).json({ erro: 'Título, gênero e usuário são obrigatórios' });
     }
 
@@ -114,6 +120,7 @@ app.post('/api/filmes', upload.single('capa'), async (req, res) => {
     res.status(201).json(rows[0]);
 });
 
+// Rota: Excluir Filme
 app.delete('/api/filmes/:id', async (req, res) => {
     await pool.query('DELETE FROM tb_curtida WHERE id_filme = $1', [req.params.id]);
     const { rowCount } = await pool.query('DELETE FROM tb_filme WHERE id_filme = $1', [req.params.id]);
@@ -121,19 +128,15 @@ app.delete('/api/filmes/:id', async (req, res) => {
     res.json({ ok: true });
 });
 
+// Importação do CSV de Usuários
 async function importarUsuarios() {
     const csvPath = path.join(__dirname, 'anexos', 'usuarios.csv');
-    if (!fs.existsSync(csvPath)) {
-        throw new Error(`Arquivo de usuários não encontrado: ${csvPath}`);
-    }
+    if (!fs.existsSync(csvPath)) return;
 
     const linhas = fs.readFileSync(csvPath, 'utf8').trim().split(/\r?\n/);
     const colunas = linhas.shift().split(',');
     const indices = ['nome', 'nome_usuario', 'email', 'senha', 'imagem_usuario', 'tipo']
         .map(coluna => colunas.indexOf(coluna));
-    if (indices.some(indice => indice < 0)) {
-        throw new Error('O CSV de usuários não contém as colunas esperadas.');
-    }
 
     for (const linha of linhas) {
         if (!linha.trim()) continue;
@@ -148,32 +151,15 @@ async function importarUsuarios() {
     }
 }
 
-app.use((err, req, res, next) => {
-    console.error('Erro na requisição:', err);
-    res.status(500).json({ erro: 'Erro interno no servidor' });
-});
-
+// Iniciar Servidor
 async function iniciarServidor() {
-    if (!process.env.DATABASE_URL && !process.env.PGPASSWORD) {
-        throw new Error('Configure DATABASE_URL (ou PGPASSWORD) no arquivo .env.');
-    }
     await pool.query('SELECT 1');
-    await pool.query(
-        `SELECT f.id_filme
-         FROM tb_filme f
-         JOIN tb_usuario u ON u.id_usuario = f.id_usuario
-         LEFT JOIN tb_curtida c ON c.id_filme = f.id_filme
-         LIMIT 0`,
-    );
     await importarUsuarios();
-    app.listen(Number(process.env.PORT || 3000), () => {
-        console.log(`Servidor conectado ao banco StreamFlix em http://localhost:${process.env.PORT || 3000}`);
+    app.listen(PORT, () => {
+        console.log(`Servidor rodando em http://localhost:${PORT}`);
     });
 }
 
-iniciarServidor()
-    .catch(async erro => {
-        console.error('Não foi possível iniciar o servidor/banco:', erro.message);
-        await pool.end();
-        process.exitCode = 1;
-    });
+iniciarServidor().catch(erro => {
+    console.error('Erro ao conectar com o banco de dados:', erro.message);
+});
